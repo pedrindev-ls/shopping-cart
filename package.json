@@ -35,7 +35,6 @@
   },
   "homepage": "https://github.com/betrybe/sd-0x-project-shopping-cart#readme",
   "dependencies": {
-    "cypress": "4.3.0",
     "cypress-multi-reporters": "1.2.4",
     "eslint-config-trybe-fundamentals": "1.1.0",
     "jest": "24.9.0",
@@ -45,5 +44,8 @@
     "mochawesome-report-generator": "4.1.0",
     "stylelint": "13.8.0",
     "stylelint-config-standard": "20.0.0"
+  },
+  "devDependencies": {
+    "cypress": "^9.4.1"
   }
 }
