@@ -12,7 +12,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-async function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -20,7 +20,7 @@ async function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
+  console.log(section);
   return section;
 }
 
@@ -43,19 +43,26 @@ function createCartItemElement({ sku, name, salePrice }) {
 const itemsValue = async () => {
   const data = await fetchProducts('computer');
   const unity = await data.results;
+  const newArray = [];
   unity.forEach((element) => {
     const { id: sku, title: name, thumbnail: image } = element;
-    const newObj = {
+    newArray.push({
       sku,
       name,
       image,
-    };
-    return newObj;
+    });
   });
+  return newArray;
 };
 
+const itemsList = (group) => {
+  group.forEach((element) => {
+    const itemScope = createProductItemElement(element);
+    const main = document.getElementsByClassName('items');
+    main[0].appendChild(itemScope);
+  });
+};
 window.onload = async () => {
   const items = await itemsValue();
-  console.log(items);
-  await createProductItemElement(items);
+  itemsList(items);
 };
