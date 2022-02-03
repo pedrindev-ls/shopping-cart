@@ -1,3 +1,5 @@
+const cartListSpace = document.getElementsByClassName('cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -20,7 +22,6 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-  console.log(section);
   return section;
 }
 
@@ -32,10 +33,11 @@ function cartItemClickListener(event) {
   // coloque seu código aqui
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+async function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  cartListSpace[0].appendChild(li);
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
@@ -55,6 +57,21 @@ const itemsValue = async () => {
   return newArray;
 };
 
+const itemsCart = async () => {
+  const data = await fetchProducts('computer');
+  const unity = await data.results;
+  const newArray = [];
+  unity.forEach((element) => {
+    const { id: sku, title: name, price: salePrice } = element;
+    newArray.push({
+      sku,
+      name,
+      salePrice,
+    });
+  });
+  return newArray;
+};
+
 const itemsList = (group) => {
   group.forEach((element) => {
     const itemScope = createProductItemElement(element);
@@ -62,7 +79,18 @@ const itemsList = (group) => {
     main[0].appendChild(itemScope);
   });
 };
+
 window.onload = async () => {
   const items = await itemsValue();
   itemsList(items);
+  
+  const btn = document.getElementsByClassName('item__add');
+  const cartItems = await itemsCart();
+  const carting = (id) => fetchItem(id);
+  for (let index = 0; index < btn.length; index += 1) {
+    btn[index].addEventListener('click', async () => {
+      const computer = await carting(cartItems[index].sku);
+      await createCartItemElement(computer);
+    });
+  }
 };
