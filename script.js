@@ -12,7 +12,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+async function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -40,4 +40,22 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = () => { };
+const itemsValue = async () => {
+  const data = await fetchProducts('computer');
+  const unity = await data.results;
+  unity.forEach((element) => {
+    const { id: sku, title: name, thumbnail: image } = element;
+    const newObj = {
+      sku,
+      name,
+      image,
+    };
+    return newObj;
+  });
+};
+
+window.onload = async () => {
+  const items = await itemsValue();
+  console.log(items);
+  await createProductItemElement(items);
+};
