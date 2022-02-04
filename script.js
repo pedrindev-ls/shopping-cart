@@ -2,6 +2,7 @@ const cartListSpace = document.getElementsByClassName('cart__items');
 const cart = document.querySelector('ol');
 const btn = document.getElementsByClassName('item__add');
 const listed = document.getElementsByTagName('li');
+const clearBtn = document.getElementsByClassName('empty-cart');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -97,6 +98,13 @@ const addListener = (items) => {
     items[index].addEventListener('click', cartItemClickListener);
   }
 };
+
+clearBtn[0].addEventListener('click', () => {
+  for (let index = (listed.length - 1); index >= 0; index -= 1) {
+    cart.removeChild(listed[index]);
+    saveCartItems(cart.innerHTML);
+  }
+});
 
 window.onload = async () => {
   const items = await itemsValue();

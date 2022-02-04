@@ -1,4 +1,3 @@
-const place = document.querySelector('ol');
 const getSavedCartItems = async () => {
   const text = localStorage.getItem('cartItems');
   return text;
