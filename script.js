@@ -57,21 +57,6 @@ const itemsValue = async () => {
   return newArray;
 };
 
-const itemsCart = async () => {
-  const data = await fetchProducts('computer');
-  const unity = await data.results;
-  const newArray = [];
-  unity.forEach((element) => {
-    const { id: sku, title: name, price: salePrice } = element;
-    newArray.push({
-      sku,
-      name,
-      salePrice,
-    });
-  });
-  return newArray;
-};
-
 const itemsList = (group) => {
   group.forEach((element) => {
     const itemScope = createProductItemElement(element);
@@ -80,17 +65,27 @@ const itemsList = (group) => {
   });
 };
 
+const itemsCart = async (value) => {
+  const { id: sku, title: name, price: salePrice } = value;
+  return {
+    sku,
+    name,
+    salePrice,
+  };
+};
+
 window.onload = async () => {
   const items = await itemsValue();
   itemsList(items);
   
   const btn = document.getElementsByClassName('item__add');
-  const cartItems = await itemsCart();
   const carting = (id) => fetchItem(id);
   for (let index = 0; index < btn.length; index += 1) {
     btn[index].addEventListener('click', async () => {
-      const computer = await carting(cartItems[index].sku);
-      await createCartItemElement(computer);
+      const focus = items[index].sku;
+      const data = await carting(focus);
+      const choosed = await itemsCart(data);
+      await createCartItemElement(choosed);
     });
   }
 };
