@@ -1,4 +1,5 @@
 const cartListSpace = document.getElementsByClassName('cart__items');
+const cart = document.querySelector('ol');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -30,7 +31,8 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  cart.removeChild(event.target);
+  return 1;
 }
 
 async function createCartItemElement({ sku, name, salePrice }) {
@@ -88,4 +90,5 @@ window.onload = async () => {
       await createCartItemElement(choosed);
     });
   }
+  cart.addEventListener('click', cartItemClickListener());
 };
