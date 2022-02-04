@@ -1,5 +1,7 @@
-const getSavedCartItems = () => {
-  // seu código aqui
+const place = document.querySelector('ol');
+const getSavedCartItems = async () => {
+  const text = localStorage.getItem('cartItems');
+  return text;
 };
 
 if (typeof module !== 'undefined') {
