@@ -135,6 +135,10 @@ const addListener = (items) => {
 
 clearBtn[0].addEventListener('click', () => {
   for (let index = (listed.length - 1); index >= 0; index -= 1) {
+    const removed = listed[index].innerText;
+    const takeValue = removed.split('$');
+    const takedValue = takeValue[1];
+    subPrice(takedValue);
     cart.removeChild(listed[index]);
     saveCartItems(cart.innerHTML);
   }
