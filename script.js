@@ -108,7 +108,6 @@ const sumPrice = async (info) => {
   savePrice();
 };
 
-
 const requestPrice = () => {
   const savedPrice = localStorage.getItem('price');
   totalPrice.innerText = savedPrice;
