@@ -3,6 +3,9 @@ const cart = document.querySelector('ol');
 const btn = document.getElementsByClassName('item__add');
 const listed = document.getElementsByTagName('li');
 const clearBtn = document.getElementsByClassName('empty-cart');
+let value = +localStorage.getItem('price');
+const placeToPrice = document.getElementsByClassName('total-price');
+const totalPrice = placeToPrice[0];
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -29,11 +32,28 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
+const savePrice = () => {
+  console.log(totalPrice.innerText);
+  localStorage.setItem('price', totalPrice.innerText);
+};
+  
+const subPrice = async (price) => {
+  value -= price;
+  value = Math.round(value * 100);
+  value /= 100;
+  totalPrice.innerText = value;
+  savePrice();
+};
+  
 function cartItemClickListener(event) {
+  const removedItem = event.target.innerText;
+  const takePrice = removedItem.split('$');
+  const takedPrice = +takePrice[1];
+  subPrice(takedPrice);
   cart.removeChild(event.target);
   saveCartItems(cart.innerHTML);
 }
@@ -71,13 +91,27 @@ const itemsList = (group) => {
   });
 };
 
-const itemsCart = async (value) => {
-  const { id: sku, title: name, price: salePrice } = value;
+const itemsCart = async (things) => {
+  const { id: sku, title: name, price: salePrice } = things;
   return {
     sku,
     name,
     salePrice,
   };
+};
+
+const sumPrice = async (info) => {
+  value += (info.salePrice);
+  value = Math.round(value * 100);
+  value /= 100;
+  totalPrice.innerText = value;
+  savePrice();
+};
+
+
+const requestPrice = () => {
+  const savedPrice = localStorage.getItem('price');
+  totalPrice.innerText = savedPrice;
 };
 
 const addCart = async () => {
@@ -88,6 +122,7 @@ const addCart = async () => {
       const focus = items[index].sku;
       const data = await carting(focus);
       const choosed = await itemsCart(data);
+      await sumPrice(choosed);
       await createCartItemElement(choosed);
     });
   }
@@ -113,4 +148,5 @@ window.onload = async () => {
   const cartSaved = await getSavedCartItems();
   cart.innerHTML = cartSaved;
   addListener(listed);
+  requestPrice();
 };
